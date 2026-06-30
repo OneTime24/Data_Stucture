@@ -1,5 +1,5 @@
 
-//1. Transposition: Slowly reducing or forwarding for each found
+
 #include <iostream>
 using namespace std;
 
@@ -44,7 +44,8 @@ int search(Array *arr){
 
         if(key==arr->ary[i]){
 
-            swap(&arr->ary[i],&arr->ary[i-1]);
+            // swap(&arr->ary[i],&arr->ary[i-1]);          //1. Transposition: Slowly reducing or forwarding for each found
+            swap(&arr->ary[i],&arr->ary[0]);          //2. MOVE TO head: Suddenchange to irst reduce drastically
             return i;
         }
         
