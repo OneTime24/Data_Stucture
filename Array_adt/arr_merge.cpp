@@ -72,10 +72,12 @@ void neg_left(Array arr){
 
 Array merge(Array arr1,Array arr2){
 
-    int i,j,k=0;
+    int i=0,j=0,k=0;
 
     Array tmp;
-    tmp.ary=new int[arr1.size+arr2.size];
+    tmp.size = arr1.size + arr2.size;
+    tmp.leng = arr1.leng + arr2.leng;
+    tmp.ary = new int[tmp.size];
     while(i<arr1.leng && j<arr2.leng){
 
         if(arr1.ary[i]<arr2.ary[j]){
@@ -83,16 +85,19 @@ Array merge(Array arr1,Array arr2){
         }else{
             tmp.ary[k++]=arr2.ary[j++];
         }
+    }
 
         for(;i<arr1.leng;i++){
-            tmp.ary[k++]=arr1.ary[i++];
+            tmp.ary[k++]=arr1.ary[i];
         }
 
         for(;j<arr2.leng;j++){
-            tmp.ary[k++]=arr2.ary[j++];
+            tmp.ary[k++]=arr2.ary[j];
         }
 
-    }
+    
+
+    return tmp;
 }
 
 
@@ -130,5 +135,11 @@ int main(){
         cin>>arr2.ary[i];
     }
 
-    Array *arr3;
+    sort(arr);
+    sort(arr2);
+    Array arr3=merge(arr,arr2);
+
+    disp(arr3);
+
+
 }
