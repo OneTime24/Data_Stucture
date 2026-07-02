@@ -48,6 +48,26 @@ bool check_sort(Array arr){
     return true;
 }
 
+void neg_left(Array arr){
+
+    int i=0;
+    int j=arr.leng-1;
+
+    while(i<j){
+
+        while(arr.ary[i]<0){
+            i++;
+        }
+        while(arr.ary[j]>=0){
+            j--;
+        }
+
+        if(i<j){
+            swap(&arr.ary[i],&arr.ary[j]);
+        }
+    }
+}
+
 
 int main(){
 
@@ -85,4 +105,9 @@ int main(){
 
 
 
+    disp(arr);
+
+    neg_left(arr);
+
+    disp(arr);
 }
