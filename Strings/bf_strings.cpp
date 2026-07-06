@@ -1,6 +1,6 @@
 
 
-// jsut a rendom strings problem for resresh
+// just a rendom strings problem for resresh
 
 #include <iostream>
 #include <string>
