@@ -15,8 +15,14 @@ class detail{
 
      public:
 
+     detail(){
+        name="nill";
+        age=-1;
+     }
      detail(string s, int a):name(s),age(a){};
 
+
+     
      void output(){
         cout<<"Name: "<<name<<"\nAge"<<age<<endl;
      }
@@ -24,12 +30,17 @@ class detail{
 
 int main(){
 
-    cout<<"Enter Name: ";
+    detail std[5];
 
-    string nm;
-    
-    cin>>nm;
+    for(int i=0;i<5;i++){
+        std[i]={"Ali",0+i};
+    }
 
-    cout<<nm;
+
+
+    for(int i=0;i<5;i++){
+        std[i].output();
+    }
+
 
 }
