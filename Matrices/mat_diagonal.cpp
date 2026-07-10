@@ -56,14 +56,14 @@ int main(){
 
     cout<<geter(m,1,1);
 
-    // seter(m,2,2,20);
+    seter(m,2,2,20);
 
-    // seter(m,3,3,30);
+    seter(m,3,3,30);
 
-    // seter(m,4,4,40);
+    seter(m,4,4,40);
 
 
-    // display(m);
+    display(m);
 
 
 
