@@ -51,27 +51,27 @@ int deletion(Node *&head,int pos){
     int x;
 
     if(pos==1){
-        p->next=head;
-        head=p;
-        x=p->data;
+        x=head->data;
+        head=head->next;
+
         delete p;
         return x;
     }else{
 
-        for(int i=1;i<pos-1;i++){
-
-            p=p->next;
+        for(int i=1;i<pos;i++){
             q=p;
+            p=p->next;
         }
 
-        if(p==nullptr){
-
-            x=q->data;
+        if(p!=nullptr){
+            q->next=p->next;
+            x=p->data;
             delete p;
             return x;
             
         }
     }
+    return -1;
 }
 
 int main(){
@@ -100,6 +100,7 @@ int main(){
     cout<<endl;
     traversal(head);
 
-    deletion(head,3);
+    cout<<endl<<deletion(head,3);
+    cout<<endl;
     traversal(head);
 }
