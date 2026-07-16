@@ -10,8 +10,10 @@ struct Node{
 };
 
 
-void traversal(Node *n){
-    while(n->next!=nullptr){
+void traversal(Node *head){
+
+    Node *n=head;
+    while(n!=nullptr){
         cout<<n->data<<" ";
         n=n->next;
     }
@@ -20,11 +22,13 @@ void traversal(Node *n){
 
 int main(){
 
-    Node *head=new Node;
+    
 
     Node *n1=new Node;
     n1->data=1;
     
+    Node *head=n1;
+
     Node *n2=new Node;
     n2->data=2;
     n1->next=n2;
@@ -38,6 +42,7 @@ int main(){
     n4->data=4;
     n3->next=n4;
 
+    n4->next=nullptr;
     traversal(head);
 
 
