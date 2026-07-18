@@ -74,9 +74,9 @@ Node* merge(Node *first, Node *second){
         second=second->next;
     }
 
-    last=last->next;
+    last->next=nullptr;
 
-    while(first->next!=nullptr && second->next!=nullptr){
+    while(first!=nullptr && second!=nullptr){
 
         if(first->data<second->data){
 
@@ -91,7 +91,7 @@ Node* merge(Node *first, Node *second){
             second=second->next;
 
         }
-        last=nullptr;
+        last->next=nullptr;
     }
 
     if(first!=nullptr){
@@ -130,5 +130,9 @@ int main(){
     traversal(head1);
 
     traversal(head2);
+
+    Node *merged=merge(head1,head2);
+
+    traversal(merged);
 
 }
