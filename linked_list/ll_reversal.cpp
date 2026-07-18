@@ -9,6 +9,8 @@ struct Node{
     Node *next;
 };
 
+Node *head=nullptr;
+Node *last=nullptr;
 void traversal(Node *head){
     Node *n=head;
 
@@ -18,6 +20,15 @@ void traversal(Node *head){
     }
 }
 
+void recursive_rev(Node *q,Node *p){
+
+    if(p!=nullptr){
+        recursive_rev(p,p->next);
+        p->next=q;
+    }else{
+        head=q;
+    }
+}
 void reversal(Node *&head){
     Node *n=head;
 
@@ -26,15 +37,16 @@ void reversal(Node *&head){
     Node *next=nullptr;
 
 
-    while(curr!=nullptr){
-        next=curr->next;
-        curr->next=prev;
-        prev=curr;
-        curr=next;
-    }
+    // while(curr!=nullptr){
+    //     next=curr->next;
+    //     curr->next=prev;
+    //     prev=curr;
+    //     curr=next;
+    // }
+
+    recursive_rev(prev,curr);
+    // head=prev;
 }
-Node *head=nullptr;
-Node *last=nullptr;
 void Insert(int pos, int x)
 {
     Node *t = new Node;
@@ -89,5 +101,9 @@ int main(){
     Insert(3,4);
 
 
+    traversal(head);
+    cout<<endl;
+
+    reversal(head);
     traversal(head);
 }
