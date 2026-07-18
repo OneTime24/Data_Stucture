@@ -68,7 +68,26 @@ void concat(Node *head1, Node *head2){
 
     p->next=head2;
 }
+
+//safer version
+Node* Concatenate(Node *first, Node *second)
+{
+    if(first == nullptr)
+        return second;
+
+    Node *p = first;
+
+    while(p->next != nullptr)
+    {
+        p = p->next;
+    }
+
+    p->next = second;
+
+    return first;
+}
 int main(){
+
 
     Node *head1=new Node;
     head1=nullptr;
