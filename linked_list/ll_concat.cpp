@@ -19,7 +19,7 @@ void traversal(Node *head){
     }
     cout<<endl;
 }
-void Insert(Node *head, Node *last,int pos, int x)
+void Insert(Node *&head, Node *&last,int pos, int x)
 {
     Node *t = new Node;
     t->data = x;
@@ -62,7 +62,7 @@ void Insert(Node *head, Node *last,int pos, int x)
 void concat(Node *head1, Node *head2){
 
     Node *p=head1;
-    while(p!=nullptr){
+    while(p->next!=nullptr){
         p=p->next;
     }
 
