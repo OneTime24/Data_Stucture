@@ -60,6 +60,49 @@ void Insert(Node *&head, Node *&last,int pos, int x)
     }
 }
 
+Node* merge(Node *first, Node *second){
+
+    Node *third=nullptr;
+    Node *last=nullptr;
+
+
+    if(first->data <second->data){
+        third=last=first;
+        first=first->next;
+    }else{
+        third=last=second;
+        second=second->next;
+    }
+
+    last=last->next;
+
+    while(first->next!=nullptr && second->next!=nullptr){
+
+        if(first->data<second->data){
+
+            last->next=first;
+            last=first;
+            first=first->next;
+
+        }else{
+
+            last->next=second;
+            last=second;
+            second=second->next;
+
+        }
+        last=nullptr;
+    }
+
+    if(first!=nullptr){
+        last->next=first;
+    }else{
+        last->next=second;
+    }
+
+    
+    return third;
+}
 int main(){
 
         Node *head1=new Node;
