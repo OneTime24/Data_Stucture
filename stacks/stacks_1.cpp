@@ -58,20 +58,26 @@ class stacks{
     bool isFull(){
         return top==size-1;
     }
-
-    void display(){
-        for(int i =0;i<=top;i++){
-            cout<<s[i]<<endl;
-        }
-        cout<<"\nStack ended:\n";
+void display()
+{
+    if(isEmpty())
+    {
+        cout<<"Stack is empty\n";
+        return;
     }
+
+    cout<<"Top\n";
+    for(int i=top;i>=0;i--)
+    {
+        cout<<s[i]<<endl;
+    }
+}
 };
 
 
 int main(){
     stacks s1;
 
-    cout<<endl<<s1.isEmpty()<<endl;
     s1.push(1);
     s1.push(2);
     s1.push(3);
