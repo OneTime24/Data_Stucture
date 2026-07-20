@@ -25,6 +25,7 @@ void push(int x){
 int pop(){
     if(top==nullptr){
         cout<<"Stack Underflowed: ";
+        return -1;
     }
 
     Node *p=top;
@@ -50,26 +51,35 @@ bool isEmpty(){
     return top==nullptr;
 }
 
+void traverse(Node *he){
+    Node *p=he;
+
+    while(p!=nullptr){
+        cout<<p->data<<" ";
+        p=p->next;
+    }
+}
+
 
 int main(){
 
-    Node *head=new Node;
-    Node *n1;
-    n1->data=10;
-    head->next=n1;
 
-    Node *n2;
-    n2->data=20;
-    n1->next=n2;
+    push(7);
 
-    Node *n3;
-    n3->data=20;
-    n2->next=n3;
+    push(8);
 
-    Node *n4;
-    n4->data=20;
-    n3->next=n4;
+    push(9);
 
+    push(10);
+    push(11);
+    push(12);
+
+    traverse(top);
+    cout<<endl;
+
+    pop();
+    
+    traverse(top);
 
     
 }
