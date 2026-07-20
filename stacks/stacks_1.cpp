@@ -87,4 +87,5 @@ int main(){
 
     s1.display();
     
+    cout<<s1.peek();
 }
