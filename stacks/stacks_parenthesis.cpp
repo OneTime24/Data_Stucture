@@ -25,5 +25,5 @@ bool check_p(string exp){
 
 int main(){
 
-    cout<<check_p("((a+b)))");
+    cout<<check_p("((a+b))");
 }
