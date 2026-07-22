@@ -68,5 +68,6 @@ string infixto(string exp){
 int main(){
 
     string exp="(A+B)*C";
+    cout<<infixto(exp);
     
 }
