@@ -48,7 +48,9 @@ string infixto(string exp){
                 st.pop();
             }
         }else{
-            while(!st.empty() &&preced(st.top())>=preced(ch)){
+           while(!st.empty() &&
+      (preced(st.top()) > preced(ch) ||
+      (preced(st.top()) == preced(ch) && ch != '^'))){
                 postfix+=st.top();
                 st.pop();
             }
