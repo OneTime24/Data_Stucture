@@ -29,10 +29,10 @@ class queue{
     }
 
     void enqueue(int x){
-        if(front==-1 && rear==-1){
+        if(isEmpty()){
             front=rear=0;
             q[rear]=x;
-        }else if((rear+1)%size==front){
+        }else if(isFull()){
                 cout<<"Overflow!!";
         }else{
             rear=(rear+1)%size;
@@ -40,22 +40,31 @@ class queue{
         }
     }
 
-    void dequeue(){
+    int dequeue(){
+        int x=0;
         if(front==-1){
+
             cout<<"Queue Underflowed: ";
-        }else if(front==0 && rear==0){
-            front=rear=0;
+        }else if(front==rear){
+            x=q[front];
+            front=rear=-1;
             cout<<"Queue empty now: ";
         }else{
+            x=q[front];
             front=(front+1)%size;
-            front++;
         }
+        return x;
     }
     void traverse(){
+        int i=front;
+        while(true){
+            cout << q[i] << " ";
 
-        for(int i=front;i<rear;i++){
-            cout<<q[i]<<" ";
-        }
+            if(i == rear)
+                break;
+
+            i = (i + 1) % size;
+                }
     }
 };
 int main(){
