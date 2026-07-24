@@ -58,8 +58,8 @@ class queue{
 
     void insertFront(int x){
         if(isEmpty()){
-            front=rear=-1;
-            cout<<"Queue Underflowed: : ";
+            front=rear=0;
+            q[front]=x;
         }else if(isFull()){
             cout<<"Queue OVerflowed: ";
         }else{
