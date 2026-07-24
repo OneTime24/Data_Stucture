@@ -56,6 +56,11 @@ class queue{
         return x;
     }
     void traverse(){
+            if(isEmpty())
+    {
+        cout<<"Queue is Empty\n";
+        return;
+}
         int i=front;
         while(true){
             cout << q[i] << " ";
@@ -65,6 +70,10 @@ class queue{
 
             i = (i + 1) % size;
                 }
+    }
+        ~queue()
+    {
+        delete[] q;
     }
 };
 int main(){
