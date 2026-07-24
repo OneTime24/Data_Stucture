@@ -14,6 +14,7 @@ Node *rear=nullptr;
 void enque(int x){
 
     Node *p;
+    p=new Node;
     p->data=x;
     p->next=nullptr;
     if(front==nullptr){
