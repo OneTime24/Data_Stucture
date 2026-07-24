@@ -31,6 +31,7 @@ int deque(){
     if(front==nullptr){
         cout<<"Queue Underflowed: ";
     }else if(front==rear){
+        x=front->data;
         cout<<"Queue Emptied: ";
         front=nullptr;
         rear=nullptr;
@@ -38,6 +39,8 @@ int deque(){
         Node *t=front;
         x=t->data;
         front=front->next;
+        
+    delete t;   
     }
     return x;
 }
