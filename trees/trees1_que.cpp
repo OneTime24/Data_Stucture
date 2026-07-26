@@ -38,6 +38,38 @@ class Tree{
             root->right=nullptr;
 
             q.push(root);
+
+        while(!q.empty()){
+            p=q.front();
+            q.pop();
+
+            cout<<"ENter value of left Child: (-1 ) for none: ";
+            cin>>x;
+
+            if(x!=-1){
+                t=new Node;
+                t->data=x;
+                t->left=nullptr;
+                t->right=nullptr;
+
+                p->left=t;
+                q.push(t);
+            }
+
+
+            cout<<"ENter value of Right Child: (-1 ) for none: ";
+            cin>>x;
+
+            if(x!=-1){
+                t=new Node;
+                t->data=x;
+                t->left=nullptr;
+                t->right=nullptr;
+
+                p->right=t;
+                q.push(t);
+            }
+        }
         }
 
 };
