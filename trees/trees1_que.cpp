@@ -10,57 +10,51 @@ struct Node{
     Node *right;
 };
 
-class Tree{
+class tree{
 
     private:
         Node *root;
 
     public:
-
-        Tree(){
+        tree(){
             root=nullptr;
         }
 
         void createtree(){
-            
             Node *p;
             Node *t;
             int x;
 
             queue<Node*> q;
-            cout<<"Enter ROOT VLUE: ";
+
+            cout<<"Enter ROOT Value: ";
             cin>>x;
-
             root=new Node;
-
             root->data=x;
             root->left=nullptr;
             root->right=nullptr;
 
             q.push(root);
-
-        while(!q.empty()){
-            p=q.front();
-            q.pop();
-
-            cout << "Enter left child of " << p->data << " (-1 for none): ";
-            cin>>x;
-
-            if(x!=-1){
-                t=new Node;
+            
+            while(!q.empty()){
+                p=q.front();
+                q.pop();
+                
+                cout<<"Enter LEft Child of"<<p->data<<" Value: ";
+                cin>>x;
+                if(x!=-1){
+                    t=new Node;
                 t->data=x;
                 t->left=nullptr;
                 t->right=nullptr;
 
                 p->left=t;
                 q.push(t);
-            }
-
-            cout << "Enter Right child of " << p->data << " (-1 for none): ";
-            cin>>x;
-
-            if(x!=-1){
-                t=new Node;
+                }
+                cout<<"Enter Right Child of"<<p->data<<" Value: ";
+                cin>>x;
+                if(x!=-1){
+                    t=new Node;
                 t->data=x;
                 t->left=nullptr;
                 t->right=nullptr;
@@ -73,11 +67,10 @@ class Tree{
 
 };
 
+
 int main(){
 
-    Tree t;
-    t.createtree();
-
-    
-
+    tree t1;
+    t1.createtree();
 }
+
