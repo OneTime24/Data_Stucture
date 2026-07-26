@@ -43,7 +43,7 @@ class Tree{
             p=q.front();
             q.pop();
 
-            cout<<"ENter value of left Child: (-1 ) for none: ";
+            cout << "Enter left child of " << p->data << " (-1 for none): ";
             cin>>x;
 
             if(x!=-1){
@@ -56,8 +56,7 @@ class Tree{
                 q.push(t);
             }
 
-
-            cout<<"ENter value of Right Child: (-1 ) for none: ";
+            cout << "Enter Right child of " << p->data << " (-1 for none): ";
             cin>>x;
 
             if(x!=-1){
@@ -76,5 +75,9 @@ class Tree{
 
 int main(){
 
+    Tree t;
+    t.createtree();
+
+    
 
 }
