@@ -10,10 +10,9 @@ struct Node{
     Node *right;
 };
 
-class tree{
+Node *root;
 
-    private:
-        Node *root;
+class tree{
 
     public:
         tree(){
@@ -65,6 +64,38 @@ class tree{
         }
         }
 
+        void preorder(Node *p){
+
+            if(p!=nullptr){
+
+                cout<<p->data<<" ";
+                preorder(p->left);
+                preorder(p->right);
+            }
+        }
+        void inorder(Node *p){
+
+            if(p!=nullptr){
+
+                inorder(p->left);
+                cout<<p->data<<" ";
+                inorder(p->right);
+            }
+       
+        }
+
+
+        void postorder(Node *p){
+
+            if(p!=nullptr){
+
+                postorder(p->left);
+                postorder(p->right);
+                cout<<p->data<<" ";
+                
+            }
+        }
+
 
 };
 
@@ -73,5 +104,10 @@ int main(){
 
     tree t1;
     t1.createtree();
+    t1.preorder(root);
+    cout<<endl;
+    t1.inorder(root);
+    cout<<endl;
+    t1.postorder(root);
 }
 
