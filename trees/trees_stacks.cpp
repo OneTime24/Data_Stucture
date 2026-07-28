@@ -94,7 +94,53 @@ class tree{
         }
     }
 
+    void itrinorder(){
 
+        stack <Node*> st;
+
+        Node *p=root;
+
+        while(p!=nullptr || !st.empty()){
+
+            if(p!=nullptr){
+                st.push(p);
+                p=p->left;
+            }else{
+                p=st.top();
+                st.pop();
+                cout<<p->data<<" ";
+                p=p->right;
+            }
+        }
+    }
+
+
+    void levelorder(){
+        queue <Node*> q;
+        Node *p=root;
+
+        if(p==nullptr){
+            return ;
+        }
+
+        q.push(p);
+
+        while(!q.empty()){
+
+            p=q.front();
+            q.pop();
+
+            cout<<p->data<<" ";
+
+            if(p->left!=nullptr){
+                q.push(p->left);
+            }
+        
+            if(p->right!=nullptr){
+                q.push(p->right);
+            }
+        }
+    }
 };
 
 
@@ -103,4 +149,8 @@ int main(){
     tree t1;
     t1.createtree();
     t1.itrpreorder();
+    cout<<endl;
+    t1.itrinorder();
+    cout<<endl;
+    t1.levelorder();
 }
