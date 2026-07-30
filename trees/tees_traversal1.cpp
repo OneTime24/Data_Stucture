@@ -42,7 +42,7 @@ class tree{
                 cout<<"Enter LEft Child of"<<p->data<<" Value: ";
                 cin>>x;
                 if(x!=-1){
-                    t=new Node;
+                t=new Node;
                 t->data=x;
                 t->left=nullptr;
                 t->right=nullptr;
