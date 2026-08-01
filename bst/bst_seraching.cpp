@@ -46,7 +46,7 @@ class tree{
             p=q.front();
             q.pop();
 
-            cout<<"Enter left child of "<<root->data<<" value: ";
+            cout<<"Enter left child of "<<p->data<<" value: ";
             cin>>x;
             
             if(x!=-1){
@@ -60,7 +60,7 @@ class tree{
             }
 
 
-            cout<<"Enter RIght child of "<<root->data<<" value: ";
+            cout<<"Enter RIght child of "<<p->data<<" value: ";
             cin>>x;
             
             if(x!=-1){
@@ -136,7 +136,12 @@ int main(){
     t1.createtree();
     t1.levelorder();
 
-    Node* searh_n1=t1.searchBST(80);
+    Node* search_n1 = t1.searchBST(80);
 
-    cout<<searh_n1->data;
+    if(search_n1 != nullptr)
+        cout <<endl<<search_n1->data;
+    else
+        cout << "Key not found";
+
+
 }
