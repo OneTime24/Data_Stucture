@@ -49,7 +49,7 @@ class tree{
             cout<<"Enter left child of "<<root->data<<" value: ";
             cin>>x;
             
-            while(x!=-1){
+            if(x!=-1){
                 t=new Node;
                 t->data=x;
                 t->left=nullptr;
@@ -63,7 +63,7 @@ class tree{
             cout<<"Enter RIght child of "<<root->data<<" value: ";
             cin>>x;
             
-            while(x!=-1){
+            if(x!=-1){
                 t=new Node;
                 t->data=x;
                 t->left=nullptr;
@@ -76,4 +76,67 @@ class tree{
         }
 
     }
+    void levelorder(){
+        Node *p=new Node;
+        p=root;
+
+        if(p==nullptr){
+            return ;
+        }
+
+        queue<Node*> q;
+        q.push(p);
+
+        while(!q.empty()){
+            p=q.front();
+            q.pop();
+
+            cout<<p->data<<" ";
+
+            if(p->left!=nullptr){
+                q.push(p->left);
+            }
+            if(p->right!=nullptr){
+                q.push(p->right);
+            }
+        }
+
+
+
+    }
+
+    Node* searchBST(int key){
+        Node *p=new Node;
+        p=root;
+
+        while(p!=nullptr){
+
+            if(key==p->data){
+                return p;
+            }
+            if(key<p->data){
+                p=p->left;
+            }
+            if(key>p->data){
+                p=p->right;
+            }
+            
+        }
+        return nullptr;
+
+    }
 };
+
+
+
+
+int main(){
+
+    tree t1;
+    t1.createtree();
+    t1.levelorder();
+
+    Node* searh_n1=t1.searchBST(80);
+
+    cout<<searh_n1->data;
+}
