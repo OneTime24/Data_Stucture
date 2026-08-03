@@ -198,6 +198,54 @@ class tree{
         }
         return p;
     }
+    Node* Delete(Node *p, int key)
+{
+    if (p == nullptr)
+        return nullptr;
+
+    // Leaf node
+    if (p->left == nullptr && p->right == nullptr)
+    {
+        if (p == root)
+            root = nullptr;
+
+        delete p;
+        return nullptr;
+    }
+
+    // Search
+    if (key < p->data)
+    {
+        p->left = Delete(p->left, key);
+    }
+    else if (key > p->data)
+    {
+        p->right = Delete(p->right, key);
+    }
+    else
+    {
+        // Node found
+
+        if (Height(p->left) > Height(p->right))
+        {
+            Node *q = InPre(p->left);
+
+            p->data = q->data;
+
+            p->left = Delete(p->left, q->data);
+        }
+        else
+        {
+            Node *q = InSucc(p->right);
+
+            p->data = q->data;
+
+            p->right = Delete(p->right, q->data);
+        }
+    }
+
+    return p;
+}
 };
 
 
