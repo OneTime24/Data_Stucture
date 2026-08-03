@@ -87,6 +87,13 @@ class tree{
 
     return (x > y ? x : y) + 1;
 }
+Node* InPre(Node *p)
+{
+    while (p && p->right != nullptr)
+        p = p->right;
+
+    return p;
+}
     void levelorder(){
         Node *p=new Node;
         p=root;
