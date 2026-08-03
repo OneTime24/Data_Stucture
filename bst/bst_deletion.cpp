@@ -94,6 +94,13 @@ Node* InPre(Node *p)
 
     return p;
 }
+Node* InSucc(Node *p)
+{
+    while (p && p->left != nullptr)
+        p = p->left;
+
+    return p;
+}
     void levelorder(){
         Node *p=new Node;
         p=root;
