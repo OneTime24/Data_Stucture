@@ -77,6 +77,16 @@ class tree{
         }
 
     }
+    int Height(Node *p)
+{
+    if (p == nullptr)
+        return 0;
+
+    int x = Height(p->left);
+    int y = Height(p->right);
+
+    return (x > y ? x : y) + 1;
+}
     void levelorder(){
         Node *p=new Node;
         p=root;
