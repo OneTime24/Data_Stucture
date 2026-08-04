@@ -222,7 +222,7 @@ Node* InSucc(Node *p)
         }
         return p;
     }
-    Node* Delete(Node *p, int key)
+    Node* Delete(Node *p, int key)      //some probelems 
 {
     if (p == nullptr)
         return nullptr;
