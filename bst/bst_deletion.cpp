@@ -279,39 +279,17 @@ int main(){
 
     tree t1;
 
-    // t1.insert(50);
-    // t1.insert(30);
-    
-    // t1.insert(10);
-    
-    // t1.insert(20);
-
-
-    // repeatedly calling it agian and again and we get the bst:
     root = t1.Rinsert(root, 50);
     root = t1.Rinsert(root, 30);
     root = t1.Rinsert(root, 70);
     root = t1.Rinsert(root, 20);
 
     t1.levelorder();
-    
-    // t1.createtree();
-    // t1.levelorder();
-
-    // Node* search_n1 = t1.searchBST(80);
-
-    // if(search_n1 != nullptr)
-    //     cout <<endl<<search_n1->data;
-    // else
-    //     cout << "Key not found";
 
 
-    // Node* search_n2 = t1.rsearch(root,90);
+    Node *updated=t1.Delete(root,70);
 
-    // if(search_n2 != nullptr)
-    //     cout <<endl<<search_n2->data;
-    // else
-    //     cout << "Key not found";
+    cout<<"\nDeleted: "<<updated->data;
 
 
 }
