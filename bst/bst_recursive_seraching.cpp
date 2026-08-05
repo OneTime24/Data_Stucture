@@ -139,7 +139,7 @@ class tree{
         }
 
         if(key<p->data){
-            rsearch(p->left,key);
+           return rsearch(p->left,key);
         }
 
         return rsearch(p->right,key);
