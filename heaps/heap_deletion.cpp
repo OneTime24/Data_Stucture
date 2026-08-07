@@ -17,6 +17,7 @@ class Heap{
     }
 
 
+    // heapify up : max heap
     void heap_insert(int val){
         size++;
         int i=size;
@@ -34,6 +35,7 @@ class Heap{
         }
     }
 
+    // heapify down : Max Heap
     int deletion(){
         if(size==0){
             return -1;
