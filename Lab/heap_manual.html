@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heap - Data Structures Lab Manual</title>
+<style>
+  :root{
+    --bg:#0f1420; --panel:#171e2e; --panel2:#1d2639; --ink:#e8edf7; --muted:#9fb0cc;
+    --accent:#ffb020; --accent2:#38c6ff; --good:#3ddc84; --bad:#ff5d73; --line:#2a3652;
+    --code:#0b101c;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;font-size:17px}
+  .wrap{max-width:980px;margin:0 auto;padding:28px 20px 70px}
+  header.top{border:1px solid var(--line);background:linear-gradient(135deg,#182238,#101827);border-radius:16px;padding:26px 28px;margin-bottom:26px}
+  .uni{letter-spacing:2px;font-size:13px;color:var(--accent2);text-transform:uppercase}
+  h1{margin:8px 0 6px;font-size:34px;line-height:1.2}
+  .sub{color:var(--muted);font-size:16px}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  .chip{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:5px 14px;font-size:14px;color:var(--ink)}
+  .chip b{color:var(--accent)}
+  h2{font-size:24px;margin:38px 0 10px;padding-top:10px}
+  h2 .num{color:var(--accent);margin-right:8px}
+  h3{font-size:19px;margin:22px 0 8px;color:#ffd479}
+  p{margin:8px 0}
+  ul,ol{margin:8px 0 8px 6px}
+  li{margin:5px 0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin:14px 0}
+  .analogy{background:#12233a;border-left:5px solid var(--accent2);border-radius:10px;padding:14px 18px;margin:14px 0}
+  .analogy .tag{color:var(--accent2);font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase}
+  .warn{background:#2b1620;border-left:5px solid var(--bad);border-radius:10px;padding:14px 18px;margin:14px 0}
+  .warn .tag{color:var(--bad);font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase}
+  .tip{background:#12291c;border-left:5px solid var(--good);border-radius:10px;padding:14px 18px;margin:14px 0}
+  .tip .tag{color:var(--good);font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase}
+  .joke{background:#26200f;border-left:5px solid var(--accent);border-radius:10px;padding:12px 18px;margin:14px 0;font-style:italic}
+  .formula{background:var(--code);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-family:Consolas,Menlo,monospace;font-size:17px;text-align:center;margin:12px 0;color:#ffd479}
+  pre{background:var(--code);border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow-x:auto;font-family:Consolas,Menlo,monospace;font-size:14.5px;line-height:1.55;margin:12px 0}
+  pre .cm{color:#7d8fb0}
+  pre .kw{color:#38c6ff}
+  code{font-family:Consolas,Menlo,monospace;background:#232f4a;border-radius:5px;padding:1px 6px;font-size:.92em;color:#ffd479}
+  table{border-collapse:collapse;width:100%;margin:12px 0;font-size:15.5px}
+  th,td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+  th{background:var(--panel2);color:#ffd479}
+  td.c,th.c{text-align:center}
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0;text-align:center}
+  .fig .cap{color:var(--muted);font-size:14px;margin-top:8px}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .step .n{display:inline-block;background:var(--accent);color:#161006;font-weight:800;border-radius:50%;width:26px;height:26px;line-height:26px;text-align:center;margin-bottom:6px}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}
+  .controls input{background:var(--code);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 12px;font-size:16px;width:110px}
+  button{background:var(--accent);color:#161006;border:none;border-radius:8px;padding:10px 18px;font-size:15.5px;font-weight:700;cursor:pointer}
+  button:hover{filter:brightness(1.1)}
+  button.ghost{background:var(--panel2);color:var(--ink);border:1px solid var(--line)}
+  #viz{background:#0b101c;border:1px solid var(--line);border-radius:12px;width:100%;height:auto}
+  #arrStrip{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+  .cell{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:7px 0;width:52px;text-align:center}
+  .cell .v{font-weight:800;font-size:16px;display:block}
+  .cell .i{color:var(--muted);font-size:11.5px;display:block}
+  .cell.hot{border-color:var(--accent);background:#2b2110}
+  #log{background:var(--code);border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-family:Consolas,Menlo,monospace;font-size:14.5px;min-height:110px;max-height:230px;overflow-y:auto;white-space:pre-wrap}
+  .ans{display:none;background:#12291c;border:1px solid var(--good);border-radius:12px;padding:14px 18px;margin:10px 0}
+  .task{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:12px;padding:16px 20px;margin:14px 0}
+  .task h3{margin-top:0}
+  .deadline{background:#2b1620;border:1px solid var(--bad);border-radius:12px;padding:14px 18px;margin:14px 0}
+  .small{color:var(--muted);font-size:14.5px}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--muted);margin:8px 0}
+  .dot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:5px}
+  footer{color:var(--muted);font-size:14px;margin-top:44px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="uni">FAST NUCES &middot; Peshawar Campus</div>
+  <h1>Heap: The Biggest One Is Always on Top</h1>
+  <div class="sub">Data Structures Lab Manual</div>
+  <div class="meta">
+    <span class="chip">Instructor: <b>Hamza Raziq Khan</b></span>
+    <span class="chip">Language: <b>C++</b></span>
+    <span class="chip">Before this lab: <b>Arrays, Binary Trees, Classes</b></span>
+  </div>
+</header>
+
+<h2><span class="num">1.</span>The Problem: &ldquo;Give Me the Biggest, Again and Again&rdquo;</h2>
+<p>Many programs ask the same question again and again: <b>what is the biggest value right now?</b></p>
+<ul>
+  <li>A game shows the <b>top score</b> on the leaderboard.</li>
+  <li>A hospital treats the <b>most urgent</b> patient first.</li>
+  <li>A computer runs the <b>most important</b> task first.</li>
+</ul>
+<p>With a normal array, every question is slow. To find the biggest value, you must look at <b>every</b> element. That is O(n) work, every single time. New values also keep coming, so you cannot just sort once and relax.</p>
+<p>We need a structure with three fast powers:</p>
+<div class="steps">
+  <div class="step"><span class="n">1</span><br><b>See the biggest</b> in one step.</div>
+  <div class="step"><span class="n">2</span><br><b>Remove the biggest</b> fast, and the next biggest is ready.</div>
+  <div class="step"><span class="n">3</span><br><b>Add a new value</b> fast, without breaking anything.</div>
+</div>
+<p>That structure is the <b>heap</b>.</p>
+
+<h2><span class="num">2.</span>The Heap Idea</h2>
+<div class="analogy">
+  <span class="tag">Real life</span>
+  <p style="margin:6px 0 0">Think of a hospital emergency room. Patients do <b>not</b> get treated in the order they arrived. The most urgent patient goes first. When a new patient arrives, the staff check the urgency. The new patient moves <b>forward</b>, past less urgent patients, and stops at the right place. Nobody sorts the whole room again. Only one person moves.</p>
+</div>
+<p>A heap is a <b>binary tree</b> with two rules. Both rules must always be true.</p>
+<div class="card">
+  <p style="margin-top:0"><b>Rule 1: Shape rule.</b> The tree is <b>complete</b>. Every level is full, except maybe the last level. The last level fills from the <b>left</b>, with no gaps.</p>
+  <p style="margin-bottom:0"><b>Rule 2: Heap property.</b> In a <b>max-heap</b>, every parent is <b>greater than or equal to</b> its children. So the biggest value is always at the root, on top.</p>
+</div>
+<p>A <b>min-heap</b> is the same idea, flipped. Every parent is <b>smaller than or equal to</b> its children, and the smallest value sits at the root. This whole manual uses a max-heap. The min-heap is your lab task later.</p>
+<div class="warn">
+  <span class="tag">Big warning</span>
+  <p style="margin:6px 0 0">A heap is <b>not</b> a sorted list. It is also <b>not</b> a BST. In a heap, a left child can be bigger or smaller than the right child. We do not care. We only care about one thing: <b>parent versus its own children</b>. Only the root is guaranteed to be the maximum.</p>
+</div>
+<div class="joke">A heap is like a good manager. It does not know where everyone is. It only knows who is on top. &#128188;</div>
+
+<h2><span class="num">3.</span>A Tree That Lives Inside an Array</h2>
+<p>Here is the beautiful trick. A complete binary tree fits into an array <b>with no gaps</b>. We store the nodes level by level, left to right. No pointers. No node objects. Just one array.</p>
+<div class="fig">
+<svg width="640" height="240" viewBox="0 0 640 240" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial" font-size="17">
+  <line x1="320" y1="45" x2="180" y2="115" stroke="#2a3652" stroke-width="2"/>
+  <line x1="320" y1="45" x2="460" y2="115" stroke="#2a3652" stroke-width="2"/>
+  <line x1="180" y1="115" x2="105" y2="185" stroke="#2a3652" stroke-width="2"/>
+  <line x1="180" y1="115" x2="255" y2="185" stroke="#2a3652" stroke-width="2"/>
+  <line x1="460" y1="115" x2="385" y2="185" stroke="#2a3652" stroke-width="2"/>
+  <circle cx="320" cy="45" r="26" fill="#ffb020"/><text x="320" y="51" text-anchor="middle" font-weight="800" fill="#161006">40</text>
+  <circle cx="180" cy="115" r="26" fill="#1d2639" stroke="#38c6ff" stroke-width="2"/><text x="180" y="121" text-anchor="middle" font-weight="700" fill="#e8edf7">25</text>
+  <circle cx="460" cy="115" r="26" fill="#1d2639" stroke="#38c6ff" stroke-width="2"/><text x="460" y="121" text-anchor="middle" font-weight="700" fill="#e8edf7">30</text>
+  <circle cx="105" cy="185" r="26" fill="#1d2639" stroke="#38c6ff" stroke-width="2"/><text x="105" y="191" text-anchor="middle" font-weight="700" fill="#e8edf7">10</text>
+  <circle cx="255" cy="185" r="26" fill="#1d2639" stroke="#38c6ff" stroke-width="2"/><text x="255" y="191" text-anchor="middle" font-weight="700" fill="#e8edf7">15</text>
+  <circle cx="385" cy="185" r="26" fill="#1d2639" stroke="#38c6ff" stroke-width="2"/><text x="385" y="191" text-anchor="middle" font-weight="700" fill="#e8edf7">20</text>
+  <text x="320" y="16" text-anchor="middle" fill="#9fb0cc" font-size="13">index 0 (root)</text>
+  <text x="180" y="86" text-anchor="middle" fill="#9fb0cc" font-size="13">index 1</text>
+  <text x="460" y="86" text-anchor="middle" fill="#9fb0cc" font-size="13">index 2</text>
+  <text x="105" y="156" text-anchor="middle" fill="#9fb0cc" font-size="13">index 3</text>
+  <text x="255" y="156" text-anchor="middle" fill="#9fb0cc" font-size="13">index 4</text>
+  <text x="385" y="156" text-anchor="middle" fill="#9fb0cc" font-size="13">index 5</text>
+</svg>
+  <div class="cap">The same heap as an array: [ 40, 25, 30, 10, 15, 20 ]. Read the tree level by level.</div>
+</div>
+<p>Because the tree has no gaps, we can find the family of any node with simple math. For a node at index <code>i</code> (counting from 0):</p>
+<div class="formula">parent(i) = (i &minus; 1) / 2 &nbsp;&nbsp;|&nbsp;&nbsp; leftChild(i) = 2i + 1 &nbsp;&nbsp;|&nbsp;&nbsp; rightChild(i) = 2i + 2</div>
+<p>Check index 4 (value 15). Its parent is index (4&minus;1)/2 = 1, value 25. Correct. The children of index 1 are 2(1)+1 = 3 and 2(1)+2 = 4, values 10 and 15. Correct.</p>
+<div class="tip">
+  <span class="tag">Why this matters</span>
+  <p style="margin:6px 0 0">Moving up or down the tree is just one formula. No searching. No pointers. That is why heap operations are fast: the tree is complete, so its height is only about log<sub>2</sub>(n). For 1,000,000 values, the height is only about 20.</p>
+</div>
+
+<h2><span class="num">4.</span>Insert: Add at the End, Then Bubble Up</h2>
+<p>Insert has two steps. First, put the new value at the <b>end</b> of the array. The shape rule stays happy, because the last level fills from the left. But the heap property may be broken: the new value may be bigger than its parent.</p>
+<p>So step two: <b>bubble up</b>. Compare the new value with its parent. If it is bigger, swap them. Repeat. Stop when the parent is bigger, or when the value reaches the root. Only one value travels. The rest of the tree does not move.</p>
+<p><b>Worked example.</b> Insert 20, 15, 30, 10, 25, 40, one by one. Watch the bold value travel.</p>
+<table>
+  <tr><th>Insert</th><th>What happens</th><th>Array after</th></tr>
+  <tr><td class="c">20</td><td>First value. It becomes the root.</td><td>[ 20 ]</td></tr>
+  <tr><td class="c">15</td><td>15 is smaller than parent 20. It stays.</td><td>[ 20, 15 ]</td></tr>
+  <tr><td class="c">30</td><td>30 is bigger than parent 20. Swap. 30 is the new root.</td><td>[ 30, 15, 20 ]</td></tr>
+  <tr><td class="c">10</td><td>10 is smaller than parent 15. It stays.</td><td>[ 30, 15, 20, 10 ]</td></tr>
+  <tr><td class="c">25</td><td>25 is bigger than parent 15. Swap. Parent now 30, bigger. Stop.</td><td>[ 30, 25, 20, 10, 15 ]</td></tr>
+  <tr><td class="c">40</td><td>40 beats parent 20, swap. 40 beats new parent 30, swap. 40 is the root.</td><td>[ 40, 25, 30, 10, 15, 20 ]</td></tr>
+</table>
+<p>Cost: the value travels up at most the height of the tree. So insert is <b>O(log n)</b>.</p>
+
+<h2><span class="num">5.</span>Peek and Extract Max: Take the Root, Then Sink Down</h2>
+<p><b>Peek</b> is trivial. The maximum is at index 0. Read it. Done. O(1).</p>
+<p><b>Extract max</b> removes the root. This makes a hole at the top. We fix it in three steps:</p>
+<div class="steps">
+  <div class="step"><span class="n">1</span><br>Save the root value. That is the answer.</div>
+  <div class="step"><span class="n">2</span><br>Move the <b>last</b> value in the array to the root. Delete the last place. The shape rule stays happy.</div>
+  <div class="step"><span class="n">3</span><br><b>Sink down</b> (heapify down): compare the new root with its children. Swap it with the <b>bigger child</b>. Repeat until both children are smaller, or it reaches a leaf.</div>
+</div>
+<p><b>Worked example.</b> Extract max from [ 40, 25, 30, 10, 15, 20 ].</p>
+<ul>
+  <li>Answer is 40. Move the last value, 20, to the root: [ 20, 25, 30, 10, 15 ].</li>
+  <li>Children of 20 are 25 and 30. The bigger child is 30. Swap: [ 30, 25, 20, 10, 15 ].</li>
+  <li>Index of 20 is now 2. Its children would be index 5 and 6. They do not exist. Stop.</li>
+  <li>Final heap: [ 30, 25, 20, 10, 15 ]. New maximum is 30. Correct.</li>
+</ul>
+<div class="warn">
+  <span class="tag">Why the bigger child?</span>
+  <p style="margin:6px 0 0">When a value sinks, it must swap with the <b>bigger</b> child. The bigger child moves up, and a parent must be bigger than both children. If you swap with the smaller child, the bigger child stays below its new, smaller parent. Rule broken.</p>
+</div>
+<p>Cost: the value sinks at most the height of the tree. So extract max is also <b>O(log n)</b>.</p>
+
+<h2><span class="num">6.</span>Playground: Break It, Fix It, Watch It</h2>
+<p>Type a number and press <b>Insert</b>. Press <b>Extract Max</b> to remove the root. The tree and the array are the same heap, shown two ways. The orange node is the one that just moved.</p>
+<div class="controls">
+  <input id="numIn" type="number" placeholder="Number">
+  <button onclick="uiInsert()">Insert</button>
+  <button class="ghost" onclick="uiExtract()">Extract Max</button>
+  <button class="ghost" onclick="uiPeek()">Peek</button>
+  <button class="ghost" onclick="uiDemo()">Demo: 20 15 30 10 25 40</button>
+  <button class="ghost" onclick="uiClear()">Clear</button>
+</div>
+<div class="legend">
+  <span><span class="dot" style="background:#ffb020"></span> root (the maximum)</span>
+  <span><span class="dot" style="background:#38c6ff"></span> normal node</span>
+  <span><span class="dot" style="background:#3ddc84"></span> just moved</span>
+</div>
+<svg id="viz" viewBox="0 0 960 340" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial"></svg>
+<div id="arrStrip"></div>
+<div id="log">Log: the heap is empty. Insert a number to start.</div>
+
+<h2><span class="num">7.</span>Build a Heap Fast, and Heap Sort</h2>
+<p>You can build a heap by inserting n values one by one: O(n log n). But there is a faster way, called <b>heapify</b>.</p>
+<p>The idea: leaves are already perfect mini-heaps of size 1. So start at the <b>last parent</b>, index n/2 &minus; 1, and sink each value down, going backwards up to the root. Most nodes are near the leaves, so most sinks are very short. Total cost: <b>O(n)</b>.</p>
+<p><b>Worked example.</b> Build a heap from [ 5, 3, 8, 1, 9, 2 ]. Last parent is index 2 (value 8).</p>
+<ul>
+  <li>Index 2, value 8: child is index 5, value 2. 8 is bigger. No swap.</li>
+  <li>Index 1, value 3: children are 1 and 9. Swap 3 with 9: [ 5, 9, 8, 1, 3, 2 ].</li>
+  <li>Index 0, value 5: children are 9 and 8. Swap 5 with 9: [ 9, 5, 8, 1, 3, 2 ]. Now 5 sits at index 1; its children are 1 and 3, both smaller. Stop.</li>
+  <li>Result: [ 9, 5, 8, 1, 3, 2 ]. A valid max-heap.</li>
+</ul>
+<p><b>Heap sort</b> is now easy to see. Build a max-heap. Take the max (the root), and put it at the end of the array, where it belongs in sorted order. Shrink the heap by one. Sink the new root down. Repeat. At the end, the array is sorted, smallest to biggest.</p>
+<p>Sorting [ 5, 3, 8, 1, 9, 2 ] with heap sort gives [ 1, 2, 3, 5, 8, 9 ]. Total cost <b>O(n log n)</b>, and it needs <b>no extra array</b>. The sort happens inside the same array.</p>
+<div class="tip">
+  <span class="tag">Priority queue</span>
+  <p style="margin:6px 0 0">A heap is the standard way to build a <b>priority queue</b>: a queue where the most important item leaves first, not the oldest item. C++ even has one ready-made: <code>std::priority_queue</code>. In this lab you build your own, so you know what is inside the black box.</p>
+</div>
+
+<h2><span class="num">8.</span>The Full C++ Code</h2>
+<p>Read it top to bottom. Every part of this code was used in the examples above, and the output below is the real output of this exact code.</p>
+<pre><span class="cm">// Heap Lab - Max Heap in C++
+// FAST NUCES Peshawar - Data Structures Lab
+// Instructor: Hamza Raziq Khan</span>
+<span class="kw">#include</span> &lt;iostream&gt;
+<span class="kw">#include</span> &lt;vector&gt;
+<span class="kw">using namespace</span> std;
+
+<span class="kw">class</span> MaxHeap {
+<span class="kw">private</span>:
+    vector&lt;<span class="kw">int</span>&gt; heap;   <span class="cm">// the tree lives inside this array</span>
+
+    <span class="kw">int</span> parent(<span class="kw">int</span> i)     { <span class="kw">return</span> (i - 1) / 2; }
+    <span class="kw">int</span> leftChild(<span class="kw">int</span> i)  { <span class="kw">return</span> 2 * i + 1; }
+    <span class="kw">int</span> rightChild(<span class="kw">int</span> i) { <span class="kw">return</span> 2 * i + 2; }
+
+    <span class="cm">// Move the value at index i UP until the heap rule is fine again.</span>
+    <span class="kw">void</span> heapifyUp(<span class="kw">int</span> i) {
+        <span class="kw">while</span> (i &gt; 0 &amp;&amp; heap[i] &gt; heap[parent(i)]) {
+            swap(heap[i], heap[parent(i)]);
+            i = parent(i);
+        }
+    }
+
+    <span class="cm">// Move the value at index i DOWN until the heap rule is fine again.</span>
+    <span class="kw">void</span> heapifyDown(<span class="kw">int</span> i) {
+        <span class="kw">int</span> n = heap.size();
+        <span class="kw">while</span> (<span class="kw">true</span>) {
+            <span class="kw">int</span> largest = i;
+            <span class="kw">int</span> l = leftChild(i);
+            <span class="kw">int</span> r = rightChild(i);
+            <span class="kw">if</span> (l &lt; n &amp;&amp; heap[l] &gt; heap[largest]) largest = l;
+            <span class="kw">if</span> (r &lt; n &amp;&amp; heap[r] &gt; heap[largest]) largest = r;
+            <span class="kw">if</span> (largest == i) <span class="kw">break</span>;          <span class="cm">// rule is fine, stop</span>
+            swap(heap[i], heap[largest]);
+            i = largest;
+        }
+    }
+
+<span class="kw">public</span>:
+    <span class="kw">bool</span> isEmpty() { <span class="kw">return</span> heap.size() == 0; }
+
+    <span class="cm">// Step 1: put the new value at the end. Step 2: bubble it up.</span>
+    <span class="kw">void</span> insert(<span class="kw">int</span> value) {
+        heap.push_back(value);
+        heapifyUp(heap.size() - 1);
+    }
+
+    <span class="cm">// See the biggest value. Do not remove it.</span>
+    <span class="kw">int</span> peek() {
+        <span class="kw">if</span> (isEmpty()) <span class="kw">return</span> -1;
+        <span class="kw">return</span> heap[0];
+    }
+
+    <span class="cm">// Remove and return the biggest value (always at index 0).</span>
+    <span class="kw">int</span> extractMax() {
+        <span class="kw">if</span> (isEmpty()) <span class="kw">return</span> -1;
+        <span class="kw">int</span> maxValue = heap[0];
+        heap[0] = heap.back();   <span class="cm">// move the last value to the top</span>
+        heap.pop_back();         <span class="cm">// remove the last place</span>
+        <span class="kw">if</span> (!isEmpty()) heapifyDown(0);   <span class="cm">// sink the new root down</span>
+        <span class="kw">return</span> maxValue;
+    }
+
+    <span class="kw">void</span> printArray() {
+        <span class="kw">for</span> (<span class="kw">int</span> x : heap) cout &lt;&lt; x &lt;&lt; <span class="cm">" "</span>;
+        cout &lt;&lt; endl;
+    }
+};
+
+<span class="cm">// Turn any array into a heap, in place. Start from the last parent
+// and heapify down, one by one, up to the root.</span>
+<span class="kw">void</span> buildHeap(vector&lt;<span class="kw">int</span>&gt; &amp;a) {
+    <span class="kw">int</span> n = a.size();
+    <span class="kw">for</span> (<span class="kw">int</span> i = n / 2 - 1; i &gt;= 0; i--) {
+        <span class="kw">int</span> j = i;
+        <span class="kw">while</span> (<span class="kw">true</span>) {
+            <span class="kw">int</span> largest = j;
+            <span class="kw">int</span> l = 2 * j + 1, r = 2 * j + 2;
+            <span class="kw">if</span> (l &lt; n &amp;&amp; a[l] &gt; a[largest]) largest = l;
+            <span class="kw">if</span> (r &lt; n &amp;&amp; a[r] &gt; a[largest]) largest = r;
+            <span class="kw">if</span> (largest == j) <span class="kw">break</span>;
+            swap(a[j], a[largest]);
+            j = largest;
+        }
+    }
+}
+
+<span class="cm">// Heap sort: build a heap, then keep taking the max to the end.</span>
+<span class="kw">void</span> heapSort(vector&lt;<span class="kw">int</span>&gt; &amp;a) {
+    buildHeap(a);
+    <span class="kw">for</span> (<span class="kw">int</span> end = (<span class="kw">int</span>)a.size() - 1; end &gt; 0; end--) {
+        swap(a[0], a[end]);                 <span class="cm">// max goes to its final place</span>
+        <span class="cm">// heapify down inside the smaller part a[0..end-1]</span>
+        <span class="kw">int</span> j = 0;
+        <span class="kw">while</span> (<span class="kw">true</span>) {
+            <span class="kw">int</span> largest = j;
+            <span class="kw">int</span> l = 2 * j + 1, r = 2 * j + 2;
+            <span class="kw">if</span> (l &lt; end &amp;&amp; a[l] &gt; a[largest]) largest = l;
+            <span class="kw">if</span> (r &lt; end &amp;&amp; a[r] &gt; a[largest]) largest = r;
+            <span class="kw">if</span> (largest == j) <span class="kw">break</span>;
+            swap(a[j], a[largest]);
+            j = largest;
+        }
+    }
+}
+
+<span class="kw">int</span> main() {
+    MaxHeap h;
+    <span class="kw">int</span> values[] = {20, 15, 30, 10, 25, 40};
+    <span class="kw">for</span> (<span class="kw">int</span> v : values) {
+        h.insert(v);
+        cout &lt;&lt; <span class="cm">"After insert "</span> &lt;&lt; v &lt;&lt; <span class="cm">": "</span>;
+        h.printArray();
+    }
+    cout &lt;&lt; <span class="cm">"Peek (max, still inside): "</span> &lt;&lt; h.peek() &lt;&lt; endl;
+    cout &lt;&lt; <span class="cm">"Extract max: "</span> &lt;&lt; h.extractMax() &lt;&lt; endl;
+    cout &lt;&lt; <span class="cm">"Heap now: "</span>;
+    h.printArray();
+
+    cout &lt;&lt; <span class="cm">"\nExtract all, one by one: "</span>;
+    MaxHeap h2;
+    <span class="kw">for</span> (<span class="kw">int</span> v : values) h2.insert(v);
+    <span class="kw">while</span> (!h2.isEmpty()) cout &lt;&lt; h2.extractMax() &lt;&lt; <span class="cm">" "</span>;
+    cout &lt;&lt; endl;
+
+    vector&lt;<span class="kw">int</span>&gt; a = {5, 3, 8, 1, 9, 2};
+    buildHeap(a);
+    cout &lt;&lt; <span class="cm">"\nbuildHeap on 5 3 8 1 9 2 gives: "</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> x : a) cout &lt;&lt; x &lt;&lt; <span class="cm">" "</span>;
+    cout &lt;&lt; endl;
+
+    vector&lt;<span class="kw">int</span>&gt; b = {5, 3, 8, 1, 9, 2};
+    heapSort(b);
+    cout &lt;&lt; <span class="cm">"heapSort on 5 3 8 1 9 2 gives: "</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> x : b) cout &lt;&lt; x &lt;&lt; <span class="cm">" "</span>;
+    cout &lt;&lt; endl;
+    <span class="kw">return</span> 0;
+}</pre>
+<h3>Output of this code</h3>
+<pre>After insert 20: 20
+After insert 15: 20 15
+After insert 30: 30 15 20
+After insert 10: 30 15 20 10
+After insert 25: 30 25 20 10 15
+After insert 40: 40 25 30 10 15 20
+Peek (max, still inside): 40
+Extract max: 40
+Heap now: 30 25 20 10 15
+
+Extract all, one by one: 40 30 25 20 15 10
+
+buildHeap on 5 3 8 1 9 2 gives: 9 5 8 1 3 2
+heapSort on 5 3 8 1 9 2 gives: 1 2 3 5 8 9</pre>
+
+<h2><span class="num">9.</span>Cost and Common Mistakes</h2>
+<table>
+  <tr><th>Operation</th><th class="c">Cost</th><th>Why</th></tr>
+  <tr><td>Peek (see the max)</td><td class="c">O(1)</td><td>It is always at index 0.</td></tr>
+  <tr><td>Insert</td><td class="c">O(log n)</td><td>One value bubbles up at most the tree height.</td></tr>
+  <tr><td>Extract max</td><td class="c">O(log n)</td><td>One value sinks down at most the tree height.</td></tr>
+  <tr><td>Build heap (heapify)</td><td class="c">O(n)</td><td>Most nodes are near the leaves, so most sinks are tiny.</td></tr>
+  <tr><td>Heap sort</td><td class="c">O(n log n)</td><td>n extracts, each O(log n). No extra array.</td></tr>
+</table>
+<div class="warn">
+  <span class="tag">Mistakes students make every year</span>
+  <ul style="margin:6px 0 0">
+    <li><b>&ldquo;The heap is sorted.&rdquo;</b> No. Only the root is the maximum. [ 40, 25, 30 ] is a fine heap and it is not sorted.</li>
+    <li><b>Mixing two index systems.</b> This manual counts from 0: children are 2i+1 and 2i+2. Some books count from 1: children are 2i and 2i+1. Pick one system and never mix them.</li>
+    <li><b>Sinking to the smaller child.</b> In a max-heap, always swap with the <b>bigger</b> child.</li>
+    <li><b>Forgetting to sink after extract.</b> Moving the last value to the root is only half the job. Without heapify down, the root is often small and the heap is broken.</li>
+    <li><b>Leaving a gap.</b> Insert always goes at the very end, and extract always takes the very last value away. That is what keeps the tree complete.</li>
+  </ul>
+</div>
+
+<h2><span class="num">10.</span>Dry Runs: Pen and Paper First</h2>
+<p>Do these on paper before you touch the keyboard. Then check yourself with the answer buttons.</p>
+<div class="card">
+  <p style="margin-top:0"><b>Dry Run 1.</b> Insert 50, 30, 40, 10 into an empty max-heap, in this order. Write the array after each insert. Draw the final tree.</p>
+  <button class="ghost" onclick="toggleAns('a1')">Show answer</button>
+  <div class="ans" id="a1">After 50: [ 50 ]. After 30: [ 50, 30 ]. After 40: [ 50, 30, 40 ] (40 is smaller than 50, it stays as the right child). After 10: [ 50, 30, 40, 10 ]. No value ever bubbles up here, because each new value is smaller than its parent. Final tree: root 50, children 30 and 40, and 10 under 30.</div>
+</div>
+<div class="card">
+  <p style="margin-top:0"><b>Dry Run 2.</b> A max-heap is stored as [ 90, 70, 80, 40, 60, 75 ]. Do ONE extract max. Write every step and the final array.</p>
+  <button class="ghost" onclick="toggleAns('a2')">Show answer</button>
+  <div class="ans" id="a2">Answer is 90. Move the last value, 75, to the root: [ 75, 70, 80, 40, 60 ]. Sink: children of 75 are 70 and 80, swap with the bigger child 80: [ 80, 70, 75, 40, 60 ]. Value 75 is now at index 2; its children (index 5 and 6) do not exist. Stop. Final array: [ 80, 70, 75, 40, 60 ].</div>
+</div>
+<div class="card">
+  <p style="margin-top:0"><b>Dry Run 3.</b> Is [ 10, 30, 20, 40 ] a valid max-heap? If not, find the FIRST index (smallest index) where the rule breaks, and name the parent and child values.</p>
+  <button class="ghost" onclick="toggleAns('a3')">Show answer</button>
+  <div class="ans" id="a3">No, it is not a valid max-heap. Index 1 holds 30. Its parent is index 0, value 10. A child (30) is bigger than its parent (10). That is the first break. (Index 3 also breaks the rule with its parent at index 1, but index 1 is the first one.)</div>
+</div>
+
+<h2><span class="num">11.</span>Lab Tasks (Do These in the Lab)</h2>
+<div class="task">
+  <h3>Task 1: Run and Observe</h3>
+  <p>Type the full code from Section 8 and run it. Your output must match the output box exactly. Then change only the values in <code>main</code> to 5, 12, 3, 18, 7. Write down the array after each insert. In one line, write which value finished at the root and why.</p>
+</div>
+<div class="task">
+  <h3>Task 2: Flip It Into a Min-Heap</h3>
+  <p>Copy your code. Change the three comparisons so the heap becomes a <b>min-heap</b>: the smallest value must sit at the root. Rename the class to <code>MinHeap</code> and <code>extractMax</code> to <code>extractMin</code>. Test with the same values as Section 8 (20, 15, 30, 10, 25, 40). Extract all values one by one. Write down the order you get, and write one line: how is this order different from the max-heap order?</p>
+</div>
+<div class="task">
+  <h3>Task 3: Find the Bug</h3>
+  <p>Your instructor will give you a broken <code>extractMax</code>. It saves the root, moves the last value to the root, and deletes the last place, but it <b>never calls heapifyDown</b>. Run it on the heap [ 40, 25, 30, 10, 15, 20 ]. Do one extract. Show the array you get. Prove it is broken: point at one parent and one child that break the rule. Then fix the bug and show the correct array after the same extract.</p>
+</div>
+<div class="task">
+  <h3>Task 4: The Third Biggest</h3>
+  <p>Insert these 10 values into a max-heap: 44, 12, 78, 5, 91, 33, 60, 27, 8, 55. Use extract max to find the <b>3rd biggest</b> value. Print each value you extract, in order, until you reach it. Write one line: why did you not need to sort the whole array for this job?</p>
+</div>
+
+<h2><span class="num">12.</span>Take-Home Tasks</h2>
+<div class="deadline"><b>Deadline:</b> one week from the lab day. Submit <b>one</b> .cpp file on the LMS. File name: <b>YourID_Name_Heap.cpp</b> (example: 24P-1234_AliKhan_Heap.cpp). One file for all three tasks: run them one after another in <code>main</code>, with clear headings printed between tasks.</div>
+<div class="task">
+  <h3>Home Task 1: Emergency Room</h3>
+  <p>Write a program for a hospital emergency room. Each patient has a name and an urgency number from 1 to 10 (10 means most urgent). Store the patients in a heap keyed on urgency (you may store pairs, or a small struct). Use these patients: Ahmed 4, Sara 9, Bilal 2, Fatima 7, Usman 9, Zainab 5, Omar 1, Hira 8. Print the order in which the doctor treats them. If two patients have the same urgency, any order between them is fine. Print one line under the order: why is a heap better here than sorting the full list after every new patient?</p>
+</div>
+<div class="task">
+  <h3>Home Task 2: Heap Sort by Hand</h3>
+  <p>Take the array [ 14, 3, 27, 9, 21, 6, 30, 11 ]. (a) Print the array right after <code>buildHeap</code>. (b) Print the array after <code>heapSort</code>. (c) Under the output, write the array you get after buildHeap <b>on paper first</b>, before running the code. Your paper answer and your program output must match. If they do not match, find out why, and write two lines about your mistake.</p>
+</div>
+<div class="task">
+  <h3>Home Task 3: Top 5 Scores</h3>
+  <p>A class has 15 exam scores: 56, 88, 72, 95, 63, 81, 47, 90, 77, 69, 84, 58, 92, 66, 73. Use a max-heap to print only the <b>top 5</b> scores, biggest first. Do not sort the full list. In comments at the top of your code, write the cost of your method and the cost of full sorting, in Big-O, and one line on why your method wins for this job.</p>
+</div>
+<p><b>Marking (same for lab and home tasks):</b> code runs without errors 40%. Output is correct 30%. Code is simple, with clear comments 15%. Written answers are correct and in your own words 15%.</p>
+<div class="card">
+  <h3 style="margin-top:0">One-Page Summary (Learn This)</h3>
+  <ul style="margin-bottom:0">
+    <li>Heap = complete binary tree + heap property. Max-heap: parent &ge; children. Root = maximum.</li>
+    <li>Index math (from 0): parent = (i&minus;1)/2, left = 2i+1, right = 2i+2.</li>
+    <li>Insert: add at the end, bubble up. Extract: root out, last value to root, sink down. Both O(log n).</li>
+    <li>Peek is O(1). Build heap is O(n). Heap sort is O(n log n) with no extra array.</li>
+    <li>A heap is not sorted, and it is not a BST.</li>
+  </ul>
+</div>
+
+<footer>FAST NUCES Peshawar &middot; Data Structures Lab &middot; Heap &middot; Instructor: Hamza Raziq Khan</footer>
+</div>
+
+<script>
+let heap = [];
+let hotIndex = -1;
+const svg = document.getElementById('viz');
+const strip = document.getElementById('arrStrip');
+const logEl = document.getElementById('log');
+
+function log(msg){ logEl.textContent += '\n' + msg; logEl.scrollTop = logEl.scrollHeight; }
+function parent(i){ return Math.floor((i - 1) / 2); }
+
+function draw(){
+  const W = 960, levelH = 82, top = 42, R = 24;
+  let s = '';
+  if(heap.length === 0){
+    s = '<text x="480" y="170" text-anchor="middle" fill="#9fb0cc" font-size="18">The heap is empty</text>';
+  }
+  function pos(i){
+    const depth = Math.floor(Math.log2(i + 1));
+    const first = Math.pow(2, depth) - 1;
+    const p = i - first;
+    const count = Math.pow(2, depth);
+    return { x: (p + 0.5) * (W / count), y: top + depth * levelH, depth };
+  }
+  for(let i = 1; i < heap.length; i++){
+    const a = pos(parent(i)), b = pos(i);
+    s += '<line x1="'+a.x+'" y1="'+a.y+'" x2="'+b.x+'" y2="'+b.y+'" stroke="#2a3652" stroke-width="2"/>';
+  }
+  for(let i = 0; i < heap.length; i++){
+    const p = pos(i);
+    let fill = '#1d2639', stroke = '#38c6ff', tcol = '#e8edf7';
+    if(i === 0){ fill = '#ffb020'; stroke = '#ffb020'; tcol = '#161006'; }
+    if(i === hotIndex){ fill = '#3ddc84'; stroke = '#3ddc84'; tcol = '#0b2016'; }
+    s += '<circle cx="'+p.x+'" cy="'+p.y+'" r="'+R+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="2"/>';
+    s += '<text x="'+p.x+'" y="'+(p.y + 6)+'" text-anchor="middle" font-weight="800" font-size="17" fill="'+tcol+'">'+heap[i]+'</text>';
+    s += '<text x="'+p.x+'" y="'+(p.y - R - 8)+'" text-anchor="middle" font-size="12" fill="#9fb0cc">idx '+i+'</text>';
+  }
+  svg.innerHTML = s;
+  strip.innerHTML = heap.map((v, i) =>
+    '<div class="cell' + (i === hotIndex ? ' hot' : '') + '"><span class="v">' + v + '</span><span class="i">index ' + i + '</span></div>'
+  ).join('');
+}
+
+function heapInsert(v){
+  heap.push(v);
+  let i = heap.length - 1;
+  log('Insert ' + v + ': placed at index ' + i + ' (the end).');
+  let moved = false;
+  while(i > 0 && heap[i] > heap[parent(i)]){
+    const p = parent(i);
+    log('  ' + heap[i] + ' is bigger than its parent ' + heap[p] + '. Swap.');
+    const t = heap[i]; heap[i] = heap[p]; heap[p] = t;
+    i = p; moved = true;
+  }
+  if(moved) log('  ' + v + ' stops at index ' + i + '.');
+  else log('  Parent is bigger. ' + v + ' stays at index ' + i + '.');
+  hotIndex = i;
+  draw();
+}
+
+function heapExtract(){
+  if(heap.length === 0){ log('Heap is empty. Nothing to extract.'); return; }
+  const max = heap[0];
+  const last = heap.pop();
+  log('Extract max: the answer is ' + max + ' (the root).');
+  if(heap.length === 0){ hotIndex = -1; draw(); return; }
+  heap[0] = last;
+  log('  Moved the last value ' + last + ' to the root. Now sink it down.');
+  let i = 0;
+  while(true){
+    let largest = i;
+    const l = 2 * i + 1, r = 2 * i + 2;
+    if(l < heap.length && heap[l] > heap[largest]) largest = l;
+    if(r < heap.length && heap[r] > heap[largest]) largest = r;
+    if(largest === i) break;
+    log('  Bigger child is ' + heap[largest] + '. Swap with ' + heap[i] + '.');
+    const t = heap[i]; heap[i] = heap[largest]; heap[largest] = t;
+    i = largest;
+  }
+  log('  ' + heap[i] + ' stops at index ' + i + '. New maximum is ' + heap[0] + '.');
+  hotIndex = i;
+  draw();
+}
+
+function uiInsert(){
+  const inp = document.getElementById('numIn');
+  const v = parseInt(inp.value, 10);
+  if(isNaN(v)){ log('Type a number first.'); return; }
+  if(heap.length >= 15){ log('Playground limit: 15 values. Extract or clear first.'); return; }
+  heapInsert(v);
+  inp.value = ''; inp.focus();
+}
+function uiExtract(){ heapExtract(); }
+function uiPeek(){
+  if(heap.length === 0){ log('Peek: the heap is empty.'); return; }
+  log('Peek: the maximum is ' + heap[0] + '. It stays inside.');
+  hotIndex = 0; draw();
+}
+function uiDemo(){
+  heap = []; logEl.textContent = 'Log: demo started.';
+  [20, 15, 30, 10, 25, 40].forEach(heapInsert);
+  log('Demo done. Final heap: [ ' + heap.join(', ') + ' ]. Now try Extract Max.');
+}
+function uiClear(){ heap = []; hotIndex = -1; logEl.textContent = 'Log: cleared. The heap is empty.'; draw(); }
+function toggleAns(id){
+  const el = document.getElementById(id);
+  el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+}
+draw();
+</script>
+</body>
+</html>
