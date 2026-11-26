@@ -1,0 +1,17 @@
+1. Lowest Common Ancestor (LCA) of Two Nodes in a BSTGiven the root of a BST and two values n1 and n2 (assume both exist in the tree), write a function node* findLCA(node* root, int n1, int n2)
+that returns the pointer to their
+deepest shared ancestor.Why professors ask it: Tests if you actually understand the BST ordering property (n1
+and n2 both smaller $\rightarrow$ go left; both larger $\rightarrow$ go right; otherwise root is the split point) instead
+
+
+of doing a slow brute-force search.2. Sorted Array to Balanced BSTGiven a sorted integer array int arr[] of size n, write a recursive function node* sortedArrayToBST(int arr[], int start, int end)
+that builds and returns a height-
+balanced BST.Why professors ask it: Tests base cases (start > end),
+mid-point calculation, and recursive tree construction without using insert().3. Check if Two BSTs are Identical (Structure + Values)Write a recursive function bool areIdentical(node* root1, node* root2)
+that returns true only if both t
+rees have the exact same shape and the exact same data in every corresponding node.Why professors ask it: Classic recursion test—students constantly forget one of the null checks (!r1 && !r2 vs !r1 || !r2).4. Find Inorder Predecessor
+and Successor of a KeyGiven root and a key, write a function void findPreSuc(node* root, node*& pre, node*& suc, int key) that sets pre to the largest value smaller than key,
+and suc to the smallest value larger than key (even if key itself isn't in the tree, or if it has no children).Why professors ask it: Directly
+tests the core mechanics behind BST deletion without requiring a full delete.5. Print All Nodes in a Given Range [k1, k2] (Sorted)Given root and two integers k1 and k2, write a function
+void printRange(node* root, int k1, int k2) that prints all keys in the BST satisfying k1 <= key <= k2 in ascending order, skipping subtrees that don't need to be visited.Why professors ask it:
+Tests modified Inorder traversal plus pruning (if (k1 < root->data) go left, etc.).
