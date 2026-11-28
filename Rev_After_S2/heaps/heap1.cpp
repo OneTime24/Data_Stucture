@@ -149,6 +149,78 @@ void update_val(int pos, int val){
         // }
     }
 }
+
+
+bool isMaxHeap(int arr[], int n){
+
+   for(int i=1;i<=(n/2);i++){
+    
+    int left=2*i;
+    int right=2*i+1;
+
+    if(left<=n && arr[left]>arr[i]){
+        return false;
+    }
+
+    if(right<=n && arr[right]>arr[i]){
+        return false;
+    }
+   }
+
+   return true;
+}
+
+bool maxHeapy(int arr[], int n, int i){
+    int largest=i;
+    int left=2*i;
+    int right=2*i+1;
+
+    while(left<=n && arr[left]>arr[largest]){
+        largest=left;
+    }
+    while(right<=n && arr[right]>arr[largest]){
+        largest=right;
+    }
+
+    if(largest!=i){
+        swap(arr[largest],arr[i]);
+
+        maxHeapy(arr,n,largest);
+    }
+}
+
+
+bool heapSort(int arr[], int n){
+
+    int size=n;
+
+
+    while(size>=1){
+
+    swap(arr[1],arr[size]);
+    size--;
+    maxHeapy(arr,n,1);
+
+    }
+
+}
+
+bool isMinHeap(int arr[], int n){
+    for(int i=1;i<=(n/2);i++){
+
+        int left=2*i;
+        int right=2*i+1;
+
+        if(left<=n && arr[left]<arr[i]){
+            return false;
+        }
+
+        if(right<=n && arr[right]<arr[i]){
+            return false;
+        }
+    }
+    return true;
+}
     void deletion(){
 
          if(size==1){
